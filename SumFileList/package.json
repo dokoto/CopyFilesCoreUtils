@@ -1,0 +1,15 @@
+{
+  "name": "fileListCreator",
+  "version": "1.0.0",
+  "description": "Suma el peso de todos los disco listado en un fichero",
+  "main": "fileListCreator.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "dokoto.moloko@gmail.com",
+  "license": "ISC",
+  "devDependencies": {
+    "inquirer": "^0.11.0",
+    "shelljs": "^0.5.3"
+  }
+}

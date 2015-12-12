@@ -1,0 +1,4 @@
+{
+	"command": "adb push",
+	"target": "/sdcard/Music/"
+}

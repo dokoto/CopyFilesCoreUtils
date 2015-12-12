@@ -1,0 +1,4 @@
+{
+	"command": "cp -rfv",
+	"target": "/mnt/disk/"
+}
