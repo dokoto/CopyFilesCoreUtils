@@ -9,6 +9,7 @@
   "author": "dokoto.moloko@gmail.com",
   "license": "ISC",
   "devDependencies": {
+    "colors": "^1.1.2",
     "inquirer": "^0.11.0",
     "shelljs": "^0.5.3"
   }
