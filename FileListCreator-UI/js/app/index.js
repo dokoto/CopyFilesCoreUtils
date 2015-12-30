@@ -20,6 +20,23 @@ define(['jquery', 'datagrid'], function($) {
     return result;
   }
 
+  function mkTable(tagID, tableID, header, datas) {
+    var $table = $('#' + tagID);
+
+    $table.empty();
+    $table.append('<table id="' + tableID +'"><thead><tr></tr></thead><tbody></tbody></table>');
+
+    var $head = $table.find('thead tr');
+    for (var i = 0; i < header.length; i++) {
+      $head.append('<th>' + header[i].title);
+    }
+
+    var tbody = $table.find('tbody');
+    for (var i = 0; i < datas.length; i++) {
+       
+    }
+  }
+
   //*****************************************************
   // PUBLIC
   //*****************************************************
