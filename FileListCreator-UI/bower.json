@@ -1,0 +1,21 @@
+{
+  "name": "app",
+  "description": "",
+  "main": "js/index.js",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "jquery": "~2.1.4",
+    "requirejs": "~2.1.22",
+    "requirejs-domready": "~2.0.1",
+    "jquery.datagrid": "~0.2.3"
+  }
+}

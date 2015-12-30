@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>FileListCreator-UI</title>
+
+	<link href="css/index.css" rel="stylesheet">
+</head>
+
+<body>
+  <div id="container">
+    <div id="header">
+      <div id="status-loader">
+        <h3 id="loading-status">Loading...</h3>
+        <p id="loading-module-name"></p>
+      </div>
+    </div>
+    <div id="content">
+      <div id="grid-local-files" class="scroll"></div>
+      <div id="grid-file-list"></div>
+    </div>
+    <div id="footer"></div>
+  </div>
+
+  <script data-main="js/app/configurator" src="js/vendor/requirejs/require.js"></script>
+</body>
+
+</html>
