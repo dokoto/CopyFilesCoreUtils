@@ -2,7 +2,7 @@ define(['./fileSelectorView', 'models/list', 'helpers/pathBrowser'], function(fi
   'use strict';
 
   //*****************************************************
-  // PRIVATE
+  // PRIVATE AND SHARED MEMORY OBJECTS
   //*****************************************************
 
   //*****************************************************

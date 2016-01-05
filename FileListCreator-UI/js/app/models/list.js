@@ -3,13 +3,8 @@ define(['./base/containerBase'], function(containerBase) {
 
 
   //*****************************************************
-  // PRIVATE
+  // PRIVATE AND SHARED MEMORY OBJECTS
   //*****************************************************
-  var _self = null;
-  var _model = {
-    filePath: null,
-    targetName: null
-  };
 
   //*****************************************************
   // PUBLIC
@@ -17,11 +12,14 @@ define(['./base/containerBase'], function(containerBase) {
   var List = (function() {
 
     function list() {
-      _self = this;
+      this._model = {
+        filePath: null,
+        targetName: null
+      };
       containerBase.this.call(this);
     }
 
-    list.prototype = containerBase.create(_model);
+    list.prototype = containerBase.create(this._model);
     list.prototype.constructor = list;
 
     return list;
