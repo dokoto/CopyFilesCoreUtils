@@ -3,7 +3,14 @@
 requirejs.config({
   paths: {
     domReady: "../vendor/requirejs-domready/domReady",
-    jquery: "../vendor/jquery/dist/jquery.min"
+    jquery: "../vendor/jquery/dist/jquery.min",
+    underscore: "../vendor/underscore/underscore-min",
+    text: '../vendor/text/text',
+  },
+  shim: {
+    underscore: {
+      exports: '_'
+    }
   }
 });
 

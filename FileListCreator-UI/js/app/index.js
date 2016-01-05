@@ -19,7 +19,11 @@ define(['jquery'], function($) {
     mainHandler.prototype.run = function() {
 
       Log.info.v1('MainHandler Run()');
-      
+      requirejs(['modules/fileSelector/fileSelectorController'], function(fileSelectorController) {
+        var controller = fileSelectorController.create();
+        controller.show();
+      });
+
     };
 
     return mainHandler;
