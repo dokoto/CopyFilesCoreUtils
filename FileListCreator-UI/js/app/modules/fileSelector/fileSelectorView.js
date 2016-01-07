@@ -37,6 +37,7 @@ define(['jquery', 'underscore', 'helpers/table', 'text!./templates/fileSelectorT
     };
 
     fileSelectorView.prototype._initWindows = function() {
+      // Show Debugger Window
       require('nw.gui').Window.get().showDevTools();
       //var win = nw.Window.get();
       //win.width = 800;
@@ -53,8 +54,11 @@ define(['jquery', 'underscore', 'helpers/table', 'text!./templates/fileSelectorT
         value: 'File Name'
       }]);
       this._fileList.setHeader([{
-        id: 'filename',
-        value: 'File Name'
+        id: 'targetName',
+        value: 'Target Name'
+      }, {
+        id: 'filePath',
+        value: 'File Path'
       }]);
       $('#container').addClass('container');
       $('#grid-local-files').addClass('left-side');

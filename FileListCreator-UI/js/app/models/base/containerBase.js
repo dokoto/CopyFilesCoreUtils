@@ -15,6 +15,10 @@ define(['./modelBase'], function(modelBase) {
       this._model = modelBase.create(model);
     }
 
+    containerBase.prototype.appendContainer = function(data) {
+      this._appendContainer(data);
+    };
+
     containerBase.prototype.append = function(data) {
       this._append(data);
     };
@@ -31,10 +35,30 @@ define(['./modelBase'], function(modelBase) {
       return this._get(position);
     };
 
+    containerBase.prototype.toObject = function() {
+      return this._toObject();
+    };
+
+    containerBase.prototype.createModel = function() {
+      return modelBase.create(this._model._data);
+    };
+
+    containerBase.prototype._appendContainer = function(data) {
+      if (data instanceof instanceof ContainerBase) {
+        for (var i = 0; i < data._container.length; i++) {
+          this._append(data._container[i]);
+        }
+      } else {
+        console.error('"data" parameter must be a "ContainerBase" object');
+      }
+
+    };
+
     containerBase.prototype._append = function(data) {
-      for (var i = 0; i < data.length; i++) {
-        this._model.insert(data[i]);
-        this._container.push(this._model);
+      if (data instanceof instanceof modelBase.this) {
+        this._container.push(data);
+      } else {
+        console.error('"data" parameter must be a "modelBase" object');
       }
     };
 
@@ -44,6 +68,14 @@ define(['./modelBase'], function(modelBase) {
         return null;
       }
       return this._container[position];
+    };
+
+    containerBase.prototype._toObject = function(position) {
+      var resul = [];
+      for (var i = 0; i < this._container.length; i++) {
+        result.push(this._container[i]._data);
+      }
+      return result;
     };
 
     containerBase.prototype._delete = function(position) {

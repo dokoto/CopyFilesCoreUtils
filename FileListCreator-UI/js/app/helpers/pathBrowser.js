@@ -23,6 +23,19 @@ define(function() {
       this._files = [];
     };
 
+    pathBrowser.prototype.isFile = function(file) {
+      var newPath = _path.join(this._currentPath, file);
+      if (_fs.lstatSync(newPath).isDirectory() === true) {
+        return false;
+      } else if (_fs.lstatSync(newPath).isSymbolicLink() === true) {
+        return false;
+      } else if (_fs.lstatSync(newPath).isFile()) {
+        return true;
+      } else {
+        return null;
+      }
+    };
+
     pathBrowser.prototype.goto = function(file) {
       this._goto((file === undefined) ? this._currentPath : file);
 

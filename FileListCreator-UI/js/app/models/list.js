@@ -32,7 +32,8 @@ define(['./base/containerBase'], function(containerBase) {
   return {
     create: function() {
       return new List();
-    }
+    },
+    this: List
 
   };
 
