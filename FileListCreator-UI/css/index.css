@@ -1,7 +1,5 @@
 table.scroll {
-  /* width: 100%; */
-  /* Optional */
-  /* border-collapse: collapse; */
+  width: 100%;
   border-spacing: 0;
   border: 2px solid black;
 }
@@ -32,4 +30,15 @@ tbody td:last-child, thead th:last-child {
 }
 table.scroll tr:hover {
   background-color: aliceblue;
+}
+.container {
+  width: 100%;
+}
+.left-side {
+  float: left;
+  width: 49%;
+}
+.right-side {
+  float: right;
+  width: 49%;
 }

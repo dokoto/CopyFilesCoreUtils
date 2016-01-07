@@ -5,21 +5,23 @@ define(['./base/containerBase'], function(containerBase) {
   //*****************************************************
   // PRIVATE AND SHARED MEMORY OBJECTS
   //*****************************************************
+  var _model  = {
+    filePath: null,
+    targetName: null
+  };
 
   //*****************************************************
   // PUBLIC
   //*****************************************************
   var List = (function() {
-
     function list() {
-      this._model = {
-        filePath: null,
-        targetName: null
-      };
       containerBase.this.call(this);
     }
 
-    list.prototype = containerBase.create(this._model);
+    // No hay problema con la comparticion de memoria de "_model" ya que baseModel
+    // clona el objeto es si mismo. "_model" solo se usa como patron de estructura
+    // no para contener datos, los datos se continene por instancia dentro de baseModel
+    list.prototype = containerBase.create(_model);
     list.prototype.constructor = list;
 
     return list;

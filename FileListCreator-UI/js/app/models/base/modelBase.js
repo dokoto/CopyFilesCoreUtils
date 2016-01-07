@@ -1,4 +1,4 @@
-define([], function() {
+define(['jquery'], function($) {
   'use strict';
 
 
@@ -14,7 +14,7 @@ define([], function() {
     function modelBase(model) {
       this._data = {};
       if (model !== undefined) {
-        this._data = model;
+        this._data = $.extend(true, {}, model);
       }
     }
 
