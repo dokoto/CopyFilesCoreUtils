@@ -11,11 +11,8 @@ define(['jquery'], function($) {
   // PUBLIC
   //*****************************************************
   var ModelBase = (function() {
-    function modelBase(model) {
+    function modelBase() {
       this._data = {};
-      if (model !== undefined) {
-        this._data = $.extend(true, {}, model);
-      }
     }
 
     modelBase.prototype.insert = function(data) {
@@ -37,7 +34,7 @@ define(['jquery'], function($) {
     modelBase.prototype._insert = function(data) {
       for (var prop in data) {
         if (!data.hasOwnProperty(prop)) continue;
-        _set(prop, data[prop]);
+        this._set(prop, data[prop]);
       }
     };
 
@@ -47,7 +44,7 @@ define(['jquery'], function($) {
 
     modelBase.prototype._get = function(prop) {
       if (this._data[prop] === undefined) {
-        console.warn('property ' + prop + ' does not exist in this model');
+        console.error('property ' + prop + ' does not exist in this model');
         return null;
       } else {
         return this._data[prop];
@@ -55,11 +52,7 @@ define(['jquery'], function($) {
     };
 
     modelBase.prototype._set = function(prop, value) {
-      if (this._data[prop] === undefined) {
-        console.warn('property ' + prop + ' does not exist in this model');
-      } else {
-        this._data[prop] = value;
-      }
+      this._data[prop] = value;
     };
 
     return modelBase;
@@ -68,8 +61,8 @@ define(['jquery'], function($) {
 
 
   return {
-    create: function(model) {
-      return new ModelBase(model);
+    create: function() {
+      return new ModelBase();
     },
     this: ModelBase
   };

@@ -42,6 +42,7 @@ requirejs(['jquery', 'domReady'], function($, domReady) {
 
 
 window.onerror = function(message, file, line, col, error) {
+  require('nw.gui').Window.get().showDevTools();
   console.error(message);
   console.error(file + ' linea ' + line + ' - col ' + col);
 };

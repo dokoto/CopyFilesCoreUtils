@@ -42,3 +42,11 @@ table.scroll tr:hover {
   float: right;
   width: 49%;
 }
+.foot {
+  position: absolute;
+  width: 98%;
+  border: 2px solid;
+  height: 70px;
+  bottom: 5px;
+  margin-left: 2px;
+}

@@ -23,22 +23,11 @@ define(function() {
       this._files = [];
     };
 
-    pathBrowser.prototype.isFile = function(file) {
-      var newPath = _path.join(this._currentPath, file);
-      if (_fs.lstatSync(newPath).isDirectory() === true) {
-        return false;
-      } else if (_fs.lstatSync(newPath).isSymbolicLink() === true) {
-        return false;
-      } else if (_fs.lstatSync(newPath).isFile()) {
-        return true;
-      } else {
-        return null;
-      }
+    pathBrowser.prototype.goto = function(file) {
+      return this._goto((file === undefined) ? this._currentPath : file);
     };
 
-    pathBrowser.prototype.goto = function(file) {
-      this._goto((file === undefined) ? this._currentPath : file);
-
+    pathBrowser.prototype.getFiles = function() {
       return this._files;
     };
 
@@ -104,21 +93,28 @@ define(function() {
     pathBrowser.prototype._goto = function(file) {
       var currentPath = this._currentPath;
       if (this._currentPath === file) {
-        this._open(this._currentPath);
+        if (!this._files || this._files.length === 0) {
+          this._open(this._currentPath);
+        }
+        return true;
       } else if (file === '...') {
         this._currentPath = _down();
         this._open(this._currentPath);
+        return true;
       } else {
         this._up(file);
         if (_fs.lstatSync(this._currentPath).isDirectory() === true) {
           this._open(this._currentPath);
+          return true;
         } else if (_fs.lstatSync(this._currentPath).isSymbolicLink() === true) {
           this._open(this._currentPath);
+          return true;
         } else if (_fs.lstatSync(this._currentPath).isFile()) {
           this._currentPath = currentPath;
-          this._open(this._currentPath);
+          return false;
         } else {
           console.warn('File type not resolve');
+          return false;
         }
 
       }

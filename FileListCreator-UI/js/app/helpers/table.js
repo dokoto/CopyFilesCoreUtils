@@ -35,8 +35,8 @@ define(['jquery', 'helpers/UUID'], function($, UUID) {
       this._fill(datas);
     };
 
-    table.prototype.activeNavigation = function(callback) {
-      this._activeNavigation(callback);
+    table.prototype.dblclick = function(callback) {
+      this._dblclick(callback);
     };
 
     table.prototype._fill = function(datas) {
@@ -63,13 +63,28 @@ define(['jquery', 'helpers/UUID'], function($, UUID) {
         }
       }
 
+      // Fixing cell width
+      this._fixColsWidth();
+    };
+
+    table.prototype._fixColsWidth = function() {
+      //var cellWidth = $('#' + this.tableId + ' tbody tr:first').children().width();
+      //$('#' + this.tableId + ' thead th:first').width(cellWidth);
+      var cellsWidth = $('#' + this.tableId + ' tbody tr:first').children().map(function() {
+        return $(this).width();
+      }).get();
+
+      $('#' + this.tableId + ' thead th:first').map(function(index) {
+        $(this).width(cellsWidth[index]);
+      }).get();
+
     };
 
     table.prototype._setHeader = function(header) {
       this.header = header;
     };
 
-    table.prototype._activeNavigation = function(callback) {
+    table.prototype._dblclick = function(callback) {
       $('#' + this.tableId + ' tbody tr').dblclick(function(event) {
         callback(event);
       })

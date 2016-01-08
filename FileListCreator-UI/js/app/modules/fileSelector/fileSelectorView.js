@@ -1,4 +1,5 @@
-define(['jquery', 'underscore', 'helpers/table', 'text!./templates/fileSelectorTpl.html'], function($, _, table, fileSelectorTpl) {
+define(['jquery', 'underscore', 'helpers/table', 'text!./templates/fileSelectorContentTpl.html', 'text!./templates/fileSelectorFootTpl.html'],
+function($, _, table, fileSelectorContentTpl, fileSelectorFootTpl) {
   'use strict';
 
 
@@ -22,23 +23,26 @@ define(['jquery', 'underscore', 'helpers/table', 'text!./templates/fileSelectorT
       this._renderFileBrowser(datas);
     };
 
-    fileSelectorView.prototype.showFileList = function() {
-      this._renderFileList([]);
+    fileSelectorView.prototype.showFileList = function(datas) {
+      if (datas === undefined) {
+        this._renderFileList([]);
+      } else {
+        this._renderFileList(datas);
+      }
     };
 
     fileSelectorView.prototype._renderFileBrowser = function(datas) {
       this._fileBrowser.fill(datas);
-      this._fileBrowser.activeNavigation(this._controller._handleFileBrowserNavigation.bind(this._controller));
+      this._fileBrowser.dblclick(this._controller._handleFileBrowserNavigation.bind(this._controller));
     };
 
     fileSelectorView.prototype._renderFileList = function(datas) {
       this._fileList.fill(datas);
-      this._fileList.activeNavigation(this._controller._handleFileListActions);
+      this._fileList.dblclick(this._controller._handleFileListActions.bind(this._controller));
     };
 
     fileSelectorView.prototype._initWindows = function() {
       // Show Debugger Window
-      require('nw.gui').Window.get().showDevTools();
       //var win = nw.Window.get();
       //win.width = 800;
       //win.height = 600;
@@ -47,8 +51,10 @@ define(['jquery', 'underscore', 'helpers/table', 'text!./templates/fileSelectorT
     fileSelectorView.prototype._initFileLists = function() {
       this._fileBrowser = table.create('grid-local-files', 'local-files', 'scroll');
       this._fileList = table.create('grid-file-list', 'file-list', 'scroll');
-      var tplCompiled = _.template(fileSelectorTpl);
-      $('#content').append(tplCompiled());
+      var contentTplCompiled = _.template(fileSelectorContentTpl);
+      var footTplCompiled = _.template(fileSelectorFootTpl);
+      $('#content').append(contentTplCompiled());
+      $('#footer').append(footTplCompiled());
       this._fileBrowser.setHeader([{
         id: 'filename',
         value: 'File Name'

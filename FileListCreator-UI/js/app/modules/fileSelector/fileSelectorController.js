@@ -4,6 +4,7 @@ define(['./fileSelectorView', 'models/list', 'helpers/pathBrowser'], function(fi
   //*****************************************************
   // PRIVATE AND SHARED MEMORY OBJECTS
   //*****************************************************
+  var _path = require('path');
 
   //*****************************************************
   // PUBLIC
@@ -18,34 +19,37 @@ define(['./fileSelectorView', 'models/list', 'helpers/pathBrowser'], function(fi
 
     fileSelectorController.prototype.show = function() {
       Log.info.v1('fileSelectorController show()');
-      this._view.showFileBrowser(this._pathBrowser.goto());
+      this._pathBrowser.goto();
+      this._view.showFileBrowser(this._pathBrowser.getFiles());
       this._view.showFileList();
+      $('#local-files thead th:first').text(this._pathBrowser._currentPath);
     };
 
     fileSelectorController.prototype._handleFileBrowserNavigation = function(e) {
       var file = $(e.target).text();
-      var files = this._pathBrowser.goto(file);
-      this._view.showFileBrowser(files);
-      if (this._pathBrowser.isFile(file) === true) {
-        this._list.append();
-        this._view.showFileList.show(this._list.toObject());
+      var hadMovement = this._pathBrowser.goto(file);
+      this._view.showFileBrowser(this._pathBrowser.getFiles());
+      $('#local-files thead th:first').text(this._pathBrowser._currentPath);
+      if (hadMovement === false) {
+        this._list.append(this._convertPathToModel(this._pathBrowser._currentPath, file));
+        this._view.showFileList(this._list.toObject());
       }
     };
 
     fileSelectorController.prototype._handleFileListActions = function(e) {
-
+      var file = $(e.target).text();
+      var position = $(e.target).parent().attr('data-pos');
+      this._list.delete(position);
+      this._view.showFileList(this._list.toObject());
     };
 
-    fileSelectorController.prototype._convertPathToModel(path) = function(path) {
-      if (path[path.length - 1] === path.sep) {
-        path = path.substr(0, path.length - 1);
-      }
-      var name = path.substr(path.lastIndexOf(path.sep) + 1);
-      name = name.replace(/ /gm, '_');
-      var model = this._list.createModel();
+    fileSelectorController.prototype._convertPathToModel = function(filePath, fileName) {
+      var targetName = fileName.replace(/ /gm, '_');
+      var model = this._list.cloneModel();
+      filePath = _path.join(filePath, fileName);
       model.insert({
-        filePath: path,
-        targetName: name
+        filePath: filePath,
+        targetName: targetName
       });
 
       return model;

@@ -10,9 +10,9 @@ define(['./modelBase'], function(modelBase) {
   // PUBLIC
   //*****************************************************
   var ContainerBase = (function() {
-    function containerBase(model) {
+    function containerBase() {
       this._container = [];
-      this._model = modelBase.create(model);
+      this._model = modelBase.create();
     }
 
     containerBase.prototype.appendContainer = function(data) {
@@ -39,12 +39,12 @@ define(['./modelBase'], function(modelBase) {
       return this._toObject();
     };
 
-    containerBase.prototype.createModel = function() {
+    containerBase.prototype.cloneModel = function() {
       return modelBase.create(this._model._data);
     };
 
     containerBase.prototype._appendContainer = function(data) {
-      if (data instanceof instanceof ContainerBase) {
+      if (data instanceof ContainerBase) {
         for (var i = 0; i < data._container.length; i++) {
           this._append(data._container[i]);
         }
@@ -55,7 +55,10 @@ define(['./modelBase'], function(modelBase) {
     };
 
     containerBase.prototype._append = function(data) {
-      if (data instanceof instanceof modelBase.this) {
+      if (!data) {
+        console.error('"data" parameter must be a "modelBase" object');
+      }
+      if (data instanceof modelBase.this) {
         this._container.push(data);
       } else {
         console.error('"data" parameter must be a "modelBase" object');
@@ -71,7 +74,7 @@ define(['./modelBase'], function(modelBase) {
     };
 
     containerBase.prototype._toObject = function(position) {
-      var resul = [];
+      var result = [];
       for (var i = 0; i < this._container.length; i++) {
         result.push(this._container[i]._data);
       }
@@ -92,8 +95,8 @@ define(['./modelBase'], function(modelBase) {
 
 
   return {
-    create: function(model) {
-      return new ContainerBase(model);
+    create: function() {
+      return new ContainerBase();
     },
     this: ContainerBase
   };
