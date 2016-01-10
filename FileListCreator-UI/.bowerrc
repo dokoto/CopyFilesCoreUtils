@@ -1,5 +1,3 @@
 {
-  "directory": "js/vendor/",
-  "proxy": "http://e454989:a1122015@http.internetpsa.inetpsa.com:80",
-  "https-proxy": "http://e454989:a1122015@http.internetpsa.inetpsa.com:80"
+  "directory": "js/vendor/"
 }

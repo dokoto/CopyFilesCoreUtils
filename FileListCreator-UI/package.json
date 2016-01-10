@@ -11,6 +11,6 @@
   "window" : {
     "width": 1280,
     "height": 750,
-    "toolbar": false
+    "toolbar": true
   }
 }

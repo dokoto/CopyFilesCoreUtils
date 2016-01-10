@@ -14,7 +14,7 @@ define(['./fileSelectorView', 'models/list', 'helpers/pathBrowser'], function(fi
       this._view = fileSelectorView.create(this);
       this._list = listModel.create();
       this._pathBrowser = pathBrowser.create();
-      this._pathBrowser.init('c:\\');
+      this._pathBrowser.init('/Users/administrador/');
     }
 
     fileSelectorController.prototype.show = function() {

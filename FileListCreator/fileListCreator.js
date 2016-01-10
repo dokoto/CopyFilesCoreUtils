@@ -5,7 +5,7 @@ var utils = require('../Utils/utils');
 
 
 function help() {
-	console.log('use: mflc -l [Folder path] -f [Folder path]');
+	console.log('use: fileListCreator -l [Folder path] -f [Folder path]');
 	console.log('-l : List files inside folder and ask if you want add to fileList');
 	console.log('-f : Add all folders inside folder to list');
 	console.log('ej : mflc -l /ALMACEN/MUSICA/G/Guns_and_roses');
