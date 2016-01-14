@@ -69,6 +69,11 @@ define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelector
       this._view.showFileList(this._list.toObject());
     };
 
+    fileSelectorController.prototype._handleSaveList = function(e) {
+      console.log('Saving file list...');
+      
+    };
+
     fileSelectorController.prototype._convertPathToModel = function(filePath, fileName) {
       var targetName = fileName.replace(/ /gm, '_');
       var model = this._list.cloneModel();

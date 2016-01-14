@@ -11,7 +11,7 @@
   "window" : {
     "width": 1280,
     "height": 750,
-    "toolbar": true
+    "toolbar": false
   },
   "chromium-args": "--allow-running-insecure-content --ignore-certificate-errors"
 }

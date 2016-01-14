@@ -16,7 +16,6 @@ function($, _, table, fileSelectorContentTpl, fileSelectorFootTpl) {
       this._fileList = null;
       this._controller = controller;
       this._initFileLists();
-      this._initWindows();
     }
 
     fileSelectorView.prototype.showFileBrowser = function(datas) {
@@ -41,11 +40,11 @@ function($, _, table, fileSelectorContentTpl, fileSelectorFootTpl) {
       this._fileList.dblclick(this._controller._handleFileListActions.bind(this._controller));
     };
 
-    fileSelectorView.prototype._initWindows = function() {
-      // Show Debugger Window
-      //var win = nw.Window.get();
-      //win.width = 800;
-      //win.height = 600;
+    fileSelectorView.prototype._setEventFooter = function(datas) {
+      var self = this;
+      $('#save').click(function(ev){
+        self._controller._handleSaveList.call(this._controller, ev);
+      });
     };
 
     fileSelectorView.prototype._initFileLists = function() {
@@ -55,6 +54,7 @@ function($, _, table, fileSelectorContentTpl, fileSelectorFootTpl) {
       var footTplCompiled = _.template(fileSelectorFootTpl);
       $('#content').append(contentTplCompiled());
       $('#footer').append(footTplCompiled());
+      this._setEventFooter();
       this._fileBrowser.setHeader([{
         id: 'filename',
         value: 'File Name'
