@@ -1,4 +1,4 @@
-define(['./fileSelectorView', 'models/list', 'helpers/pathBrowser'], function(fileSelectorView, listModel, pathBrowser) {
+define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelectorView, listModel) {
   'use strict';
 
   //*****************************************************
@@ -13,27 +13,53 @@ define(['./fileSelectorView', 'models/list', 'helpers/pathBrowser'], function(fi
     function fileSelectorController() {
       this._view = fileSelectorView.create(this);
       this._list = listModel.create();
-      this._pathBrowser = pathBrowser.create();
-      this._pathBrowser.init('/Users/administrador/');
     }
 
     fileSelectorController.prototype.show = function() {
       Log.info.v1('fileSelectorController show()');
-      this._pathBrowser.goto();
-      this._view.showFileBrowser(this._pathBrowser.getFiles());
-      this._view.showFileList();
-      $('#local-files thead th:first').text(this._pathBrowser._currentPath);
+      var self = this,
+        INIT, GOTO, FILES, INFO;
+      $.ajax('https://127.0.0.1:46969/rfs/init').then(function(init) {
+        INIT = init;
+        return $.ajax('https://127.0.0.1:46969/rfs/goto');
+      }).then(function(goto) {
+        GOTO = goto;
+        return $.ajax('https://127.0.0.1:46969/rfs/files');
+      }).then(function(files) {
+        FILES = files;
+        return $.ajax('https://127.0.0.1:46969/rfs/info');
+      }).then(function(info) {
+        INFO = info;
+        self._view.showFileBrowser(FILES.value.files);
+        self._view.showFileList();
+        $('#local-files thead th:first').text(INFO.value.info.currentPath);
+      });
     };
 
     fileSelectorController.prototype._handleFileBrowserNavigation = function(e) {
-      var file = $(e.target).text();
-      var hadMovement = this._pathBrowser.goto(file);
-      this._view.showFileBrowser(this._pathBrowser.getFiles());
-      $('#local-files thead th:first').text(this._pathBrowser._currentPath);
-      if (hadMovement === false) {
-        this._list.append(this._convertPathToModel(this._pathBrowser._currentPath, file));
-        this._view.showFileList(this._list.toObject());
-      }
+      var fileName = $(e.target).text();
+      var self = this,
+        GOTO, FILES, INFO;
+      $.ajax({
+        url: 'https://127.0.0.1:46969/rfs/goto',
+        data: {
+          file: fileName
+        }
+      }).then(function(goto) {
+        GOTO = goto;
+        return $.ajax('https://127.0.0.1:46969/rfs/files');
+      }).then(function(files) {
+        FILES = files;
+        return $.ajax('https://127.0.0.1:46969/rfs/info');
+      }).then(function(info) {
+        INFO = info;
+        self._view.showFileBrowser(FILES.value.files);
+        $('#local-files thead th:first').text(INFO.value.info.currentPath);
+        if (GOTO.value.didMovement === false) {
+          self._list.append(self._convertPathToModel(INFO.value.info.currentPath, fileName));
+          self._view.showFileList(self._list.toObject());
+        }
+      });
     };
 
     fileSelectorController.prototype._handleFileListActions = function(e) {

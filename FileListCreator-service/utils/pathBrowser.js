@@ -21,6 +21,7 @@ var PathBrowser = (function() {
   pathBrowser.prototype.init = function(rootPath) {
     this._currentPath = this._rootPath = rootPath;
     this._files = [];
+    Logger.trace('[pathBrowser.init] param[rootPath] : ' + rootPath + ' this._currentPath : ' + this._currentPath + ' this._rootPath : ' + this._rootPath);
   };
 
   pathBrowser.prototype.goto = function(file) {
@@ -28,10 +29,12 @@ var PathBrowser = (function() {
   };
 
   pathBrowser.prototype.getFiles = function() {
+    Logger.trace('[pathBrowser.getFiles] this._files.length : ' + this._files.length);
     return this._files;
   };
 
   pathBrowser.prototype.info = function() {
+    Logger.trace('[pathBrowser.info] this._currentPath : ' + this._currentPath);
     return {
       currentPath: this._currentPath,
       rootPath: this._rootPath
@@ -47,19 +50,19 @@ var PathBrowser = (function() {
     var lastSepPos = this._currentPath.lastIndexOf(_path.sep);
 
     if (lastSepPos === -1) {
-      console.warn('Filepath separator no found');
+      Logger.warn('Filepath separator no found');
       return false;
     }
 
     if (lastSepPos === this._currentPath.length - 1) {
-      newPath = _this.currentPath.substr(0, this._currentPath.lastIndexOf(_path.sep));
+      newPath = this._currentPath.substr(0, this._currentPath.lastIndexOf(_path.sep));
       newPath = newPath.substr(0, newPath.lastIndexOf(_path.sep) + 1);
     } else {
       newPath = this._currentPath.substr(0, this._currentPath.lastIndexOf(_path.sep) + 1);
     }
 
     if (_fs.existsSync(newPath) === false) {
-      console.warn('Filepath not exist: ' + newPath);
+      Logger.warn('Filepath not exist: ' + newPath);
       return false;
     }
 
@@ -71,7 +74,7 @@ var PathBrowser = (function() {
   pathBrowser.prototype._up = function(file) {
     var newPath = _path.join(this._currentPath, file);
     if (_fs.existsSync(newPath) === false) {
-      console.warn('Filepath not exist: ' + newPath);
+      Logger.warn('Filepath not exist: ' + newPath);
       return false;
     }
 
@@ -98,11 +101,12 @@ var PathBrowser = (function() {
     try {
       this._files = this._format(_fs.readdirSync(path));
     } catch (e) {
-      console.error(e);
+      Logger .error(e);
     }
   };
 
   pathBrowser.prototype._goto = function(file) {
+    Logger.trace('[pathBrowser._goto] param[file] : ' + file + ' this._currentPath : ' + this._currentPath + ' this._rootPath : ' + this._rootPath);
     var currentPath = this._currentPath;
     if (this._currentPath === file) {
       if (!this._files || this._files.length === 0) {
