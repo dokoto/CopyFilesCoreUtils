@@ -39,6 +39,10 @@ define(['jquery', 'helpers/UUID'], function($, UUID) {
       this._dblclick(callback);
     };
 
+    table.prototype.rightClick = function(callback) {
+        this._rightClick(callback);
+    };
+
     table.prototype._fill = function(datas) {
       if (!this.header) {
         console.error('Header must be setted, plese user method "setHeader()"');
@@ -87,6 +91,14 @@ define(['jquery', 'helpers/UUID'], function($, UUID) {
     table.prototype._dblclick = function(callback) {
       $('#' + this.tableId + ' tbody tr').dblclick(function(event) {
         callback(event);
+      })
+    };
+
+    table.prototype._rightClick = function(callback) {
+      $('#' + this.tableId + ' tbody tr').mousedown(function(event) {
+        if (event.button === 2) {
+          callback(event);
+        }
       })
     };
 

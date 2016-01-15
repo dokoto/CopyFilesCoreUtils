@@ -33,6 +33,7 @@ function($, _, table, fileSelectorContentTpl, fileSelectorFootTpl) {
     fileSelectorView.prototype._renderFileBrowser = function(datas) {
       this._fileBrowser.fill(datas);
       this._fileBrowser.dblclick(this._controller._handleFileBrowserNavigation.bind(this._controller));
+      this._fileBrowser.rightClick(this._controller._handleFileBrowserSelect.bind(this._controller));
     };
 
     fileSelectorView.prototype._renderFileList = function(datas) {

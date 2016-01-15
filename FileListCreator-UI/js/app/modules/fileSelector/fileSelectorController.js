@@ -55,11 +55,17 @@ define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelector
         INFO = info;
         self._view.showFileBrowser(FILES.value.files);
         $('#local-files thead th:first').text(INFO.value.info.currentPath);
-        if (GOTO.value.didMovement === false) {
-          self._list.append(self._convertPathToModel(INFO.value.info.currentPath, fileName));
-          self._view.showFileList(self._list.toObject());
-        }
       });
+    };
+
+    fileSelectorController.prototype._handleFileBrowserSelect = function(e) {
+      var fileName = $(e.target).text();
+      var self = this, INFO;
+      $.when( $.ajax('https://127.0.0.1:46969/rfs/info') ).done(function(INFO) {
+        self._list.append(self._convertPathToModel(INFO.value.info.currentPath, fileName));
+        self._view.showFileList(self._list.toObject());
+      });
+
     };
 
     fileSelectorController.prototype._handleFileListActions = function(e) {
@@ -71,7 +77,7 @@ define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelector
 
     fileSelectorController.prototype._handleSaveList = function(e) {
       console.log('Saving file list...');
-      
+
     };
 
     fileSelectorController.prototype._convertPathToModel = function(filePath, fileName) {
