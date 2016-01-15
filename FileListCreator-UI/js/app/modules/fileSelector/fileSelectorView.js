@@ -42,9 +42,9 @@ function($, _, table, fileSelectorContentTpl, fileSelectorFootTpl) {
     };
 
     fileSelectorView.prototype._setEventFooter = function(datas) {
-      var self = this;
+      var self = this;      
       $('#save').click(function(ev){
-        self._controller._handleSaveList.call(this._controller, ev);
+        self._controller._handleSaveList.call(self._controller, ev);
       });
     };
 

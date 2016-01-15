@@ -60,8 +60,9 @@ define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelector
 
     fileSelectorController.prototype._handleFileBrowserSelect = function(e) {
       var fileName = $(e.target).text();
-      var self = this, INFO;
-      $.when( $.ajax('https://127.0.0.1:46969/rfs/info') ).done(function(INFO) {
+      var self = this,
+        INFO;
+      $.when($.ajax('https://127.0.0.1:46969/rfs/info')).done(function(INFO) {
         self._list.append(self._convertPathToModel(INFO.value.info.currentPath, fileName));
         self._view.showFileList(self._list.toObject());
       });
@@ -77,7 +78,28 @@ define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelector
 
     fileSelectorController.prototype._handleSaveList = function(e) {
       console.log('Saving file list...');
+      var path = $('#fileDialog').val();
+      if (path) {
+        var csv = this._convertCsv(this._list.toObject());
+        var fs = require('fs');
+        fs.writeFile(path, csv, 'utf8', function(err) {
+          if (err) {
+            console.error('Error saving file: ' + err);
+          } else {
+            alert('It\'s saved!');
+          }
+        });
+      }
+    };
 
+    fileSelectorController.prototype._convertCsv = function(jsonModel) {
+      var csv = [];
+
+      for (var i = 0; i < jsonModel.length; i++) {
+        csv.push(jsonModel[i].filePath + ';' + jsonModel[i].targetName);
+      }
+
+      return csv.join('\n');
     };
 
     fileSelectorController.prototype._convertPathToModel = function(filePath, fileName) {
