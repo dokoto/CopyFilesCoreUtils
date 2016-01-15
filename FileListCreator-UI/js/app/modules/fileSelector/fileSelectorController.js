@@ -1,10 +1,11 @@
-define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelectorView, listModel) {
+define(['jquery', './fileSelectorView', 'models/list', 'helpers/urlGenerator'], function($, fileSelectorView, listModel, urlGenerator) {
   'use strict';
 
   //*****************************************************
   // PRIVATE AND SHARED MEMORY OBJECTS
   //*****************************************************
   var _path = require('path');
+  var _mkUrl = urlGenerator.create();
 
   //*****************************************************
   // PUBLIC
@@ -19,15 +20,15 @@ define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelector
       Log.info.v1('fileSelectorController show()');
       var self = this,
         INIT, GOTO, FILES, INFO;
-      $.ajax('https://127.0.0.1:46969/rfs/init').then(function(init) {
+      $.ajax(_mkUrl.get('INIT')).then(function(init) {
         INIT = init;
-        return $.ajax('https://127.0.0.1:46969/rfs/goto');
+        return $.ajax(_mkUrl.get('GOTO'));
       }).then(function(goto) {
         GOTO = goto;
-        return $.ajax('https://127.0.0.1:46969/rfs/files');
+        return $.ajax(_mkUrl.get('FILES'));
       }).then(function(files) {
         FILES = files;
-        return $.ajax('https://127.0.0.1:46969/rfs/info');
+        return $.ajax(_mkUrl.get('INFO'));
       }).then(function(info) {
         INFO = info;
         self._view.showFileBrowser(FILES.value.files);
@@ -41,16 +42,16 @@ define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelector
       var self = this,
         GOTO, FILES, INFO;
       $.ajax({
-        url: 'https://127.0.0.1:46969/rfs/goto',
+        url: _mkUrl.get('GOTO'),
         data: {
           file: fileName
         }
       }).then(function(goto) {
         GOTO = goto;
-        return $.ajax('https://127.0.0.1:46969/rfs/files');
+        return $.ajax(_mkUrl.get('FILES'));
       }).then(function(files) {
         FILES = files;
-        return $.ajax('https://127.0.0.1:46969/rfs/info');
+        return $.ajax(_mkUrl.get('INFO'));
       }).then(function(info) {
         INFO = info;
         self._view.showFileBrowser(FILES.value.files);
@@ -62,7 +63,7 @@ define(['jquery', './fileSelectorView', 'models/list'], function($, fileSelector
       var fileName = $(e.target).text();
       var self = this,
         INFO;
-      $.when($.ajax('https://127.0.0.1:46969/rfs/info')).done(function(INFO) {
+      $.when($.ajax(_mkUrl.get('INFO'))).done(function(INFO) {
         self._list.append(self._convertPathToModel(INFO.value.info.currentPath, fileName));
         self._view.showFileList(self._list.toObject());
       });
