@@ -5,9 +5,18 @@ define([], function() {
   // PRIVATE AND SHARE MEMORY OBJECTS
   //*****************************************************
 
-  const host = "83.36.48.112",
-    port = 46969,
-    protocol: "https://";
+  const connection = {
+    local: {
+      host: "127.0.0.1",
+      port: 46969,
+      protocol: "https://"
+    },
+    remote: {
+      host: "83.36.48.112",
+      port: 46969,
+      protocol: "https://"
+    }
+  };
 
 
   //*****************************************************
@@ -15,17 +24,18 @@ define([], function() {
   //*****************************************************
   var UrlGenerator = (function() {
 
-    function urlGenerator() {
+    function urlGenerator(env) {
+      this.env = env || 'local';
       this.endPoint = {
-        GOTO: "/rfs/goto",
-        INIT: "/rfs/init",
-        INFO: "/rfs/info",
-        FILES: "/rfs/files"
+        INFO: '/rfs/info',
+        FILES: '/rfs/files',
+        GOTO: '/rfs/goto',
+        MOVE: "/rfs/move"
       };
     }
 
     urlGenerator.prototype.get = function(endpoint) {
-      return protocol + ':' + port + this.endPoint[endpoint];
+      return connection[this.env].protocol + connection[this.env].host + ':' + connection[this.env].port + this.endPoint[endpoint];
     };
 
 
@@ -35,8 +45,8 @@ define([], function() {
 
 
   return {
-    create: function() {
-      return new UrlGenerator();
+    create: function(env) {
+      return new UrlGenerator(env);
     }
 
   };

@@ -5,12 +5,15 @@ define(['jquery', './fileSelectorView', 'models/list', 'helpers/urlGenerator'], 
   // PRIVATE AND SHARED MEMORY OBJECTS
   //*****************************************************
   var _path = require('path');
-  var _mkUrl = urlGenerator.create();
+  var _mkUrl = urlGenerator.create('local');
 
   //*****************************************************
   // PUBLIC
   //*****************************************************
+
+
   var FileSelectorController = (function() {
+
     function fileSelectorController() {
       this._view = fileSelectorView.create(this);
       this._list = listModel.create();
@@ -18,56 +21,41 @@ define(['jquery', './fileSelectorView', 'models/list', 'helpers/urlGenerator'], 
 
     fileSelectorController.prototype.show = function() {
       Log.info.v1('fileSelectorController show()');
-      var self = this,
-        INIT, GOTO, FILES, INFO;
-      $.ajax(_mkUrl.get('INIT')).then(function(init) {
-        INIT = init;
-        return $.ajax(_mkUrl.get('GOTO'));
-      }).then(function(goto) {
-        GOTO = goto;
-        return $.ajax(_mkUrl.get('FILES'));
-      }).then(function(files) {
-        FILES = files;
-        return $.ajax(_mkUrl.get('INFO'));
-      }).then(function(info) {
-        INFO = info;
-        self._view.showFileBrowser(FILES.value.files);
+      var self = this;
+
+      $.when( $.ajax(_mkUrl.get('MOVE')) ).done(function(response){
+        console.log(response);
+        self._view.showFileBrowser(response.value.files);
         self._view.showFileList();
-        $('#local-files thead th:first').text(INFO.value.info.currentPath);
+        $('#local-files thead th:first').text(response.value.info.currentPath);
       });
     };
 
+
     fileSelectorController.prototype._handleFileBrowserNavigation = function(e) {
       var fileName = $(e.target).text();
-      var self = this,
-        GOTO, FILES, INFO;
-      $.ajax({
-        url: _mkUrl.get('GOTO'),
+      var self = this;
+
+      $.when( $.ajax({
+        url: _mkUrl.get('MOVE'),
         data: {
           file: fileName
         }
-      }).then(function(goto) {
-        GOTO = goto;
-        return $.ajax(_mkUrl.get('FILES'));
-      }).then(function(files) {
-        FILES = files;
-        return $.ajax(_mkUrl.get('INFO'));
-      }).then(function(info) {
-        INFO = info;
-        self._view.showFileBrowser(FILES.value.files);
-        $('#local-files thead th:first').text(INFO.value.info.currentPath);
-      });
+      }) ).done( function(response) {
+        self._view.showFileBrowser(response.value.files);
+        $('#local-files thead th:first').text(response.value.info.currentPath);
+      } );
+
     };
 
     fileSelectorController.prototype._handleFileBrowserSelect = function(e) {
       var fileName = $(e.target).text();
-      var self = this,
-        INFO;
+      var self = this;
+
       $.when($.ajax(_mkUrl.get('INFO'))).done(function(INFO) {
         self._list.append(self._convertPathToModel(INFO.value.info.currentPath, fileName));
         self._view.showFileList(self._list.toObject());
       });
-
     };
 
     fileSelectorController.prototype._handleFileListActions = function(e) {
